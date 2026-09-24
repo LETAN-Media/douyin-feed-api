@@ -580,3 +580,21 @@ This fetches data from platforms that have their own terms, and it runs on your 
 under your control. Respect those terms and applicable law, respect the people whose
 content you collect, do not use it to harass anyone, and do not redistribute work that
 is not yours. Nobody else can enforce any of that for you.
+
+---
+
+## Deployment (LETAN-Media)
+
+Upstream: [Evil0ctal/Douyin_TikTok_Download_API](https://github.com/Evil0ctal/Douyin_TikTok_Download_API) (v5, Apache-2.0).
+Purpose: self-hosted Douyin creator-feed service used by LETAN-Media automation
+(`douyin-youtube` pipeline calls `GET /api/v1/douyin/user/posts`). This fork
+changes no upstream logic.
+
+### Northflank (single API service)
+
+- **Build:** Dockerfile at `docker/Dockerfile` (context = repo root)
+- **Expose:** the API port (`DTK_BIND_PORT`, default `8000`), path `/healthz` as health check
+- **Required ENV (names only):** `DTK_SECRET_KEY`, `DTK_DATABASE_URL`, `DTK_REDIS_URL`,
+  `DTK_BIND_HOST=0.0.0.0`, `DTK_BIND_PORT` — plus managed Postgres/Redis add-ons on Northflank
+- **Local test stack:** `docker compose -p dtk -f docker/compose.yml up -d`
+  (postgres + redis + api + worker; see `docker/README.md` and `.env.example`)
